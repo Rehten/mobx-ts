@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { Provider } from 'mobx-react';
 import './App.css';
+import { RootStore } from './stores/rootStore';
+import { Products } from './components/Products';
+
+import 'mobx-react-lite/batchingForReactDom'
+import { UserInfo } from './components/UserInfo';
+
+const rootStore: RootStore = new RootStore();
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [isConfirmed, setConfirmed] = useState<boolean>(false);
+
+    return (
+        <Provider {...rootStore}>
+            {
+                !isConfirmed
+                &&
+                <button onClick={() => setConfirmed(true)}>Подтвердить корректность данных</button>
+            }
+            <Products/>
+            <UserInfo isConfirmed={isConfirmed}/>
+        </Provider>
+    );
 }
 
 export default App;
